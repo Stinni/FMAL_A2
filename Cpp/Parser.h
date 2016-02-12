@@ -5,16 +5,22 @@
 //Kt.:        011081-3209
 //Email:      kristinnf13@ru.is
 
+#ifndef PARSER_H
+#define PARSER_H
+
+#include <stdlib.h>
 #include "Lexer.h"
 #include "Token.h"
 
 class Parser
 {
 public:
-	Parser(Lexer *lexer);
+	Parser(Lexer* lexer);
 	void parse();
 
 private:
-	Lexer *theLexer;
-	Token *nextToken;
+	Lexer* theLexer;
+	Token* nextToken;
 };
+
+#endif // PARSER_H

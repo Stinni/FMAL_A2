@@ -7,13 +7,13 @@
 
 #include "Lexer.h"
 
-Token Lexer::nextToken()
+Token* Lexer::nextToken()
 {
 	Token *newToken = new Token();
 	cin >> newToken->lexeme;
 	checkTcode(newToken);
 
-	return *newToken;
+	return newToken;
 }
 
 void Lexer::checkTcode(Token *token)

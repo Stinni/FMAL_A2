@@ -5,6 +5,9 @@
 //Kt.:        011081-3209
 //Email:      kristinnf13@ru.is
 
+#ifndef TOKEN_H
+#define TOKEN_H
+
 #include <string>
 using namespace std;
 
@@ -20,3 +23,5 @@ public:
     string lexeme;
 	int tCode;
 };
+
+#endif // TOKEN_H

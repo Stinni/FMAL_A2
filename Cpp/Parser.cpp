@@ -7,18 +7,22 @@
 
 #include "Parser.h"
 
-Parser::Parser(Lexer *lexer)
+Parser::Parser(Lexer* lexer)
 {
 	theLexer = lexer;
 }
 
 void Parser::parse()
 {
-	while (nextToken = theLexer->nextToken() && nextToken->tCode != END)
+    nextToken = theLexer->nextToken();
+	while (nextToken->tCode != END)
 	{
 		if (nextToken->tCode == ERROR)
 		{
 			cout << "Lexical error!" << endl;
+			exit(1);
 		}
+		cout << "Testing!" << endl;
+		nextToken = theLexer->nextToken();
 	}
 }
