@@ -9,8 +9,10 @@
 #define PARSER_H
 
 #include <stdlib.h>
+#include <list>
 #include "Lexer.h"
 #include "Token.h"
+using namespace std;
 
 class Parser
 {
@@ -21,13 +23,15 @@ public:
 private:
 	Lexer* theLexer;
 	Token* nextToken;
+	list<string> theListOfTerms;
+	void lex();
 	void error(string errorString);
 	void Statements();
 	void Statement();
 	void Expr();
     void Term();
     void Factor();
-	//list<Token> theList;
+    void print();
 };
 
 #endif // PARSER_H

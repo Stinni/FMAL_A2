@@ -10,15 +10,19 @@
 
 #include <string>
 #include <iostream>
+#include <cstddef>
 #include "Token.h"
 using namespace std;
 
 class Lexer
 {
 public:
-	Token *nextToken();
+    Lexer();
+    ~Lexer();
+	Token* nextToken();
 
 private:
+    Token* theToken;
 	void checkTcode(Token *token);
 	bool checkIfInt(string s);
 	bool checkIfId(string s);

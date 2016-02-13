@@ -7,13 +7,31 @@
 
 #include "Lexer.h"
 
+Lexer::Lexer()
+{
+    theToken = NULL;
+}
+
+Lexer::~Lexer()
+{
+    delete theToken;
+}
+
 Token* Lexer::nextToken()
 {
-	Token *newToken = new Token();
-	cin >> newToken->lexeme;
-	checkTcode(newToken);
+    if (theToken == NULL)
+    {
+        theToken = new Token();
+        cin >> theToken->lexeme;
+        checkTcode(theToken);
+    }
+    else
+    {
+        cin >> theToken->lexeme;
+        checkTcode(theToken);
+    }
 
-	return newToken;
+    return theToken;
 }
 
 void Lexer::checkTcode(Token *token)
