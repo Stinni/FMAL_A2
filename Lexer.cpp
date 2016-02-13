@@ -66,7 +66,7 @@ void Lexer::checkTcode(Token *token)
 
 bool Lexer::checkIfInt(string s)
 {
-	for (int i = 0; i < s.length(); i++)
+	for (unsigned int i = 0; i < s.length(); i++)
 	{
 		if (!isdigit(s[i]))
 		{
@@ -78,7 +78,7 @@ bool Lexer::checkIfInt(string s)
 
 bool Lexer::checkIfId(string s)
 {
-	for (int i = 0; i < s.length(); i++)
+	for (unsigned int i = 0; i < s.length(); i++)
 	{
 		if (!isalpha(s[i]))
 		{
