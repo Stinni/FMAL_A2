@@ -1,4 +1,5 @@
 *.o
 *.ini
 *.depend
+*.zip
 bin/

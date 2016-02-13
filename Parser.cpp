@@ -10,19 +10,54 @@
 Parser::Parser(Lexer* lexer)
 {
 	theLexer = lexer;
+	//theList = null;
 }
 
 void Parser::parse()
 {
     nextToken = theLexer->nextToken();
-	while (nextToken->tCode != END)
+	if (nextToken->tCode == ERROR)
 	{
-		if (nextToken->tCode == ERROR)
-		{
-			cout << "Lexical error!" << endl;
-			exit(1);
-		}
-		cout << "Testing!" << endl;
-		nextToken = theLexer->nextToken();
+		error("Lexical error!");
 	}
+
+	Statements();
+}
+
+void Parser::error(string errorString)
+{
+    cout << errorString << endl;
+    exit(1);
+}
+
+/*
+ * The non-terminals are: Statements (starting symbol), Statement, Expr, Term, and Factor.
+ * Terminals (tokens) are: ; end id print + - * int ( )
+*/
+void Parser::Statements()
+{
+    if (nextToken->tCode == END)
+    {
+        return;
+    }
+}
+
+void Parser::Statement()
+{
+
+}
+
+void Parser::Expr()
+{
+
+}
+
+void Parser::Term()
+{
+
+}
+
+void Parser::Factor()
+{
+
 }

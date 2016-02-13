@@ -21,6 +21,13 @@ public:
 private:
 	Lexer* theLexer;
 	Token* nextToken;
+	void error(string errorString);
+	void Statements();
+	void Statement();
+	void Expr();
+    void Term();
+    void Factor();
+	//list<Token> theList;
 };
 
 #endif // PARSER_H
