@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <cstddef>
+#include <list>
 #include "Token.h"
 using namespace std;
 
@@ -23,6 +24,7 @@ public:
 
 private:
     Token* theToken;
+    list<string> buffer;
 	void checkTcode(Token *token);
 	bool checkIfInt(string s);
 	bool checkIfId(string s);

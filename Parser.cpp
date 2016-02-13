@@ -161,9 +161,12 @@ void Parser::Factor()
 
 void Parser::print()
 {
-    for (list<string>::iterator i = theListOfTerms.end(); i != theListOfTerms.begin(); --i)
+    if (!theListOfTerms.empty())
     {
-        cout << *i << endl;
+        for (list<string>::iterator i = theListOfTerms.end(); i != theListOfTerms.begin(); --i)
+        {
+            cout << *i << endl;
+        }
+        theListOfTerms.clear();
     }
-    theListOfTerms.clear();
 }
