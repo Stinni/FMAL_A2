@@ -26,10 +26,3 @@ public:
         delete myLexer;
     }
 };
-
-int main()
-{
-    Compiler* compiler = new Compiler();
-
-    return 0;
-}

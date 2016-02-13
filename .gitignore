@@ -1,2 +1,4 @@
 *.o
 *.ini
+*.depend
+bin/
