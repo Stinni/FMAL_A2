@@ -19,7 +19,7 @@ public:
 	{
 		lexeme = "";
 		tCode = ERROR;
-	}
+	};
     string lexeme;
 	int tCode;
 };

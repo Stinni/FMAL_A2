@@ -10,18 +10,22 @@
 Parser::Parser(Lexer* lexer)
 {
 	theLexer = lexer;
+	theListOfTerms = list<string>();
 }
 
 void Parser::parse()
 {
-    lex();
+    nextToken = lex();
 	Statements();
 }
 
-void Parser::lex()
+Token Parser::lex()
 {
-    nextToken = theLexer->nextToken();
-	switch (nextToken->tCode)
+    Token theNextToken = theLexer->nextToken();
+    cout << "------------------------------------------------------------" << endl;
+    cout << "The Token has " + theNextToken.lexeme + " as it's lexeme."  << endl;
+    cout << "------------------------------------------------------------" << endl;
+	switch (theNextToken.tCode)
 	{
     case ERROR:
         error("Lexical error!");
@@ -38,10 +42,10 @@ void Parser::lex()
         theListOfTerms.push_back("MULT");
         break;
     case INT:
-        cout << "PUSH " + nextToken->lexeme << endl;
+        cout << "PUSH " + theNextToken.lexeme << endl;
         break;
     case ID:
-        cout << "PUSH " + nextToken->lexeme << endl;
+        cout << "PUSH " + theNextToken.lexeme << endl;
         break;
     case PRINT:
         theListOfTerms.push_back("PRINT");
@@ -49,6 +53,8 @@ void Parser::lex()
     default:
         break;
 	}
+
+	return theNextToken;
 }
 
 void Parser::error(string errorString)
@@ -66,7 +72,8 @@ void Parser::error(string errorString)
 */
 void Parser::Statements()
 {
-    if (nextToken->tCode == END)
+    cout << "Started STATEMENTS() function!" << endl; // TODO: DELETE!!!
+    if (nextToken.tCode == END)
     {
         print();
         return;
@@ -74,11 +81,12 @@ void Parser::Statements()
     else
     {
         Statement();
-        if (nextToken->tCode == SEMICOL)
+        if (nextToken.tCode == SEMICOL)
         {
             print();
-            lex();
+            nextToken = lex();
             Statements();
+            return;
         }
     }
     error("Syntax error!");
@@ -86,67 +94,72 @@ void Parser::Statements()
 
 void Parser::Statement()
 {
-    if (nextToken->tCode == ID)
+    cout << "Started STATEMENT() function!" << endl; // TODO: DELETE!!!
+    if (nextToken.tCode == ID)
     {
-        lex();
-        if (nextToken->tCode == ASSIGN)
+        nextToken = lex();
+        if (nextToken.tCode == ASSIGN)
         {
-            lex();
+            nextToken = lex();
             Expr();
         }
     }
-    else if (nextToken->tCode == PRINT)
+    else if (nextToken.tCode == PRINT)
     {
-        lex();
-        if (nextToken->tCode == ID)
+        nextToken = lex();
+        if (nextToken.tCode == ID)
         {
-            lex();
+            nextToken = lex();
         }
     }
 }
 
 void Parser::Expr()
 {
+    cout << "Started EXPR() function!" << endl; // TODO: DELETE!!!
     Term();
-    if (nextToken->tCode == ADD)
+    if (nextToken.tCode == ADD)
     {
-        lex();
+        nextToken = lex();
         Expr();
     }
-    else if (nextToken->tCode == SUB)
+    else if (nextToken.tCode == SUB)
     {
-        lex();
+        nextToken = lex();
         Expr();
     }
 }
 
 void Parser::Term()
 {
+    cout << "Started TERM() function!" << endl; // TODO: DELETE!!!
     Factor();
-    if (nextToken->tCode == MULT)
+    if (nextToken.tCode == MULT)
     {
-        lex();
+        nextToken = lex();
         Term();
     }
 }
 
 void Parser::Factor()
 {
-    if (nextToken->tCode == INT)
+    cout << "Started FACTOR() function!" << endl; // TODO: DELETE!!!
+    if (nextToken.tCode == INT)
     {
-        lex();
+        nextToken = lex();
     }
-    else if (nextToken->tCode == ID)
+    else if (nextToken.tCode == ID)
     {
-        lex();
+        nextToken = lex();
     }
-    else if (nextToken->tCode == LPAREN)
+    else if (nextToken.tCode == LPAREN)
     {
-        lex();
+        nextToken = lex();
         Expr();
-        if (nextToken->tCode == RPAREN)
+        if (nextToken.tCode == RPAREN)
         {
-            lex();
+            print();
+            nextToken = lex();
         }
         else
         {
@@ -161,12 +174,15 @@ void Parser::Factor()
 
 void Parser::print()
 {
+    cout << "Started PRINT() function!" << endl; // TODO: DELETE!!!
     if (!theListOfTerms.empty())
     {
-        for (list<string>::iterator i = theListOfTerms.end(); i != theListOfTerms.begin(); --i)
+        theListOfTerms.reverse();
+        for (list<string>::iterator i = theListOfTerms.begin(); i != theListOfTerms.end(); i++)
         {
             cout << *i << endl;
         }
         theListOfTerms.clear();
     }
+    cout << "Ended PRINT() function!" << endl; // TODO: DELETE!!!
 }

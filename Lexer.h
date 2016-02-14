@@ -19,15 +19,16 @@ class Lexer
 {
 public:
     Lexer();
-    ~Lexer();
-	Token* nextToken();
+	Token nextToken();
 
 private:
-    Token* theToken;
-    list<string> buffer;
-	void checkTcode(Token *token);
+    list<Token> bufferList;
+	bool checkTcode(string s);
 	bool checkIfInt(string s);
 	bool checkIfId(string s);
+	bool checkIfHasColon(string s);
+	bool checkIfOpenPar(string s);
+	bool checkIfClosePar(string s);
 };
 
 #endif // LEXER_H

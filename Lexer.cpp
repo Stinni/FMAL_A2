@@ -9,99 +9,191 @@
 
 Lexer::Lexer()
 {
-    theToken = NULL;
+    bufferList = list<Token>();
 }
 
-Lexer::~Lexer()
+Token Lexer::nextToken()
 {
-    delete theToken;
-}
-
-Token* Lexer::nextToken()
-{
-    if (theToken == NULL)
+    if (!bufferList.empty())
     {
-        theToken = new Token();
-        cin >> theToken->lexeme;
-        checkTcode(theToken);
+        Token tokenFromList = bufferList.front();
+        bufferList.pop_front();
+        return tokenFromList;
     }
-    else
+    string input;
+    cin >> input;
+    if(!checkTcode(input))
     {
-        cin >> theToken->lexeme;
-        checkTcode(theToken);
+        Token errorToken = Token();
+        return errorToken;
     }
-
-    return theToken;
+    cout << "Before copying the front Token from the bufferList." << endl;
+    Token tmp = bufferList.front();
+    cout << "After coyping and before popping the front Token from the bufferList." << endl;
+    bufferList.pop_front();
+    cout << "After popping the front Token from the bufferList" << endl;
+    return tmp;
 }
 
-void Lexer::checkTcode(Token *token)
+bool Lexer::checkTcode(string s)
 {
-	if (token->lexeme == "=")
+    Token newToken = Token();
+    newToken.lexeme = s;
+    if (s.empty() || s == "")
+    {
+        return false;
+    }
+    else if (s.length() == 1)
+    {
+        if (s == "=")
+        {
+            newToken.tCode = ASSIGN;
+        }
+        else if (s == "+")
+        {
+            newToken.tCode = ADD;
+        }
+        else if (s == "-")
+        {
+            newToken.tCode = SUB;
+        }
+        else if (s == "*")
+        {
+            newToken.tCode = MULT;
+        }
+        else if (s == "(")
+        {
+            newToken.tCode = LPAREN;
+        }
+        else if (s == ")")
+        {
+            newToken.tCode = RPAREN;
+        }
+        else if (s == ";")
+        {
+            newToken.tCode = SEMICOL;
+        }
+        else if (checkIfInt(s))
+        {
+            newToken.tCode = INT;
+        }
+        else if (checkIfId(s))
+        {
+            newToken.tCode = ID;
+        }
+        else
+        {
+            return false;
+        }
+
+        bufferList.push_back(newToken);
+        return true;
+    }
+	else if (s == "print")
 	{
-		token->tCode = ASSIGN;
+		newToken.tCode = PRINT;
+        bufferList.push_back(newToken);
+        return true;
 	}
-	else if (token->lexeme == ";")
+	else if (s == "end")
 	{
-		token->tCode = SEMICOL;
+		newToken.tCode = END;
+        bufferList.push_back(newToken);
+        return true;
 	}
-	else if (token->lexeme == "+")
+	else if (checkIfInt(s))
 	{
-		token->tCode = ADD;
+		newToken.tCode = INT;
+        bufferList.push_back(newToken);
+        return true;
 	}
-	else if (token->lexeme == "-")
+	else if (checkIfId(s))
 	{
-		token->tCode = SUB;
+		newToken.tCode = ID;
+        bufferList.push_back(newToken);
+        return true;
 	}
-	else if (token->lexeme == "*")
-	{
-		token->tCode = MULT;
-	}
-	else if (token->lexeme == "(")
-	{
-		token->tCode = LPAREN;
-	}
-	else if (token->lexeme == ")")
-	{
-		token->tCode = RPAREN;
-	}
-	else if (token->lexeme == "print")
-	{
-		token->tCode = PRINT;
-	}
-	else if (token->lexeme == "end")
-	{
-		token->tCode = END;
-	}
-	else if (checkIfInt(token->lexeme))
-	{
-		token->tCode = INT;
-	}
-	else if (checkIfId(token->lexeme))
-	{
-		token->tCode = ID;
-	}
+	else if (checkIfHasColon(s))
+    {
+        string buf = s.substr(0, buf.length()-1);
+        if(!checkTcode(buf) || !checkTcode(";"))
+        {
+            return false;
+        }
+        return true;
+    }
+	else if (checkIfOpenPar(s))
+    {
+        string buf = s.substr(1, s.length());
+        if(!checkTcode("(") || !checkTcode(buf))
+        {
+            return false;
+        }
+        return true;
+    }
+    else if (checkIfClosePar(s))
+    {
+        string buf = s.substr(0, s.length()-1);
+        if(!checkTcode(buf) || !checkTcode(")"))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    return false;
 }
 
 bool Lexer::checkIfInt(string s)
 {
-	for (unsigned int i = 0; i < s.length(); i++)
-	{
-		if (!isdigit(s[i]))
-		{
-			return false;
-		}
-	}
-	return true;
+    for (string::iterator i = s.begin(); i != s.end(); i++)
+    {
+        if (!isdigit(*i))
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool Lexer::checkIfId(string s)
 {
-	for (unsigned int i = 0; i < s.length(); i++)
-	{
-		if (!isalpha(s[i]))
-		{
-			return false;
-		}
-	}
-	return true;
+    for (string::iterator i = s.begin(); i != s.end(); i++)
+    {
+        if (!isalpha(*i))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Lexer::checkIfHasColon(string s)
+{
+    if (!s.empty())
+    {
+        string tmp = s.substr(s.length()-1, s.length());
+        return tmp == ";";
+    }
+    return false;
+}
+
+bool Lexer::checkIfOpenPar(string s)
+{
+    if (!s.empty() && s.length() > 2)
+    {
+        string tmp = s.substr(0, 1);
+        return tmp == "(";
+    }
+    return false;
+}
+
+bool Lexer::checkIfClosePar(string s)
+{
+    if (!s.empty() && s.length() > 1)
+    {
+        string tmp = s.substr(s.length()-1, s.length());
+        return tmp == ")";
+    }
+    return false;
 }

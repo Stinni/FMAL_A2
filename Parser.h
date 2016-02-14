@@ -22,9 +22,9 @@ public:
 
 private:
 	Lexer* theLexer;
-	Token* nextToken;
+	Token nextToken;
 	list<string> theListOfTerms;
-	void lex();
+	Token lex();
 	void error(string errorString);
 	void Statements();
 	void Statement();
